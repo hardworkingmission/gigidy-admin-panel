@@ -12,7 +12,6 @@ import PageNotFound from "../pages/page-not-found";
 import Signup from "../pages/signup";
 import Subscriptions from "../pages/subscriptions";
 import Users from "../pages/users";
-import { user } from "../services/user";
 import AuthService from "../services/auth.service";
 
 import { ProtectedRoute } from "./auth/ProtectedRoute";
@@ -22,7 +21,7 @@ export const rootRouter = createBrowserRouter([
   {
 
     path: "/dashboard",
-    element:  <ProtectedRoute user={AuthService.getCurrentUser()}>
+    element:  <ProtectedRoute >
                 <Dashboard />
               </ProtectedRoute>,
     children: [
@@ -62,7 +61,7 @@ export const rootRouter = createBrowserRouter([
   },
   {
     path: "/signup",
-    element: <ProtectedRoute user={AuthService.getCurrentUser()}>
+    element: <ProtectedRoute >
                <Signup />
              </ProtectedRoute>,
   },

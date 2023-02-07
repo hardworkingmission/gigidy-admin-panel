@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table } from 'antd';
+import { Table, Input, Space, Row, Col, Modal } from 'antd';
 import {
   TbListDetails
 } from 'react-icons/tb';
@@ -82,6 +82,7 @@ const columns = [
 
 const Users = () => {
     const [data, setData] = useState();
+    const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [tableParams, setTableParams] = useState({
       pagination: {
@@ -126,21 +127,63 @@ const Users = () => {
         setData([]);
       }
     };
+
+    //search
+    const onSearch = (value) => console.log(value);
+
+    //Modal for User Details
+    const showModal = () => {
+      setOpen(true);
+    };
+    const handleOk = () => {
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+        setOpen(false);
+      }, 3000);
+    };
+    const handleCancel = () => {
+      setOpen(false);
+    };
     return (
         <>
-           <Table
-                columns={columns}
-                rowKey={(record)=>record.id}
-                dataSource={data}
-                pagination={tableParams.pagination}
-                loading={loading}
-                onChange={handleTableChange}
-                scroll={{
-                    x:'100vw',
-                    y:'55vh'
-                }}
-    
-            />
+          <Row>
+            <Modal
+              open={open}
+              title="Title"
+              onOk={handleOk}
+              onCancel={handleCancel}
+            >
+              <p>Some contents...</p>
+              <p>Some contents...</p>
+              <p>Some contents...</p>
+              <p>Some contents...</p>
+              <p>Some contents...</p>
+            </Modal>
+          </Row>
+
+          <Row style={{display:'flex', justifyContent:'end', marginBottom:'20px'}}>
+            <Col  xs={22} sm={16} md={12} lg={10} xl={8} xxl={7}>
+              <Input.Search placeholder="Search user info" onSearch={onSearch} enterButton />
+            </Col>
+          </Row>
+          
+          <Row>
+            <Table
+                  columns={columns}
+                  rowKey={(record)=>record.id}
+                  dataSource={data}
+                  pagination={tableParams.pagination}
+                  loading={loading}
+                  onChange={handleTableChange}
+                  scroll={{
+                      x:'100vw',
+                      y:'55vh'
+                  }}
+      
+              />
+          </Row>
+           
         </>
     );
 };

@@ -6,6 +6,7 @@ import {
 import { Outlet } from "react-router-dom";
 import { Layout, Menu, theme } from 'antd';
 import { menuItems } from '../routes/menuItems';
+import useAdmin from '../hooks/useAdmin';
 const { Header, Sider, Content, Footer } = Layout;
 
 const Dashboard = () => {
