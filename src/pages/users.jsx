@@ -8,22 +8,10 @@ import authHeader from '../services/auth-header';
 import { roleMapper } from '../helpers/roleMapper';
 import { Link } from 'react-router-dom';
 import { AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai';
+import CustomModal from '../components/CustomModal';
 
-const columns = [
-    {
-      title: 'First Name',
-      dataIndex: 'firstName',
-      sorter: (a, b) => a.firstName.localeCompare(b.firstName),
-      sortDirections: ['descend', 'ascend'],
-      responsive: ["sm", "xs"]
-    },
-    {
-      title: 'Last Name',
-      dataIndex: 'lastName',
-      sorter: (a, b) => a.lastName.localeCompare(b.lastName),
-      sortDirections: ['descend', 'ascend'],
-      responsive: ["sm", "xs"]
-    },
+const tableColumns = (Details, Edit, Delete)=>{
+  return [
     {
       title: 'Username',
       dataIndex: 'email',
@@ -50,20 +38,15 @@ const columns = [
       responsive: ["sm", "xs"]
     },
     {
-      title: 'Type',
-      dataIndex: 'type',
-      responsive: ["sm", "xs"]
-    },
-    {
       title: 'Actions',
-      dataIndex: 'type',
-      render:()=>{
+      //dataIndex: 'type',
+      render:(record)=>{
         return(
           <div>
             <ul style={{listStyleType: 'none', display:'flex', justifyContent:'space-between', padding:0, margin:0}}>
-              <li><Link to = {'#'}><TbListDetails size={'20px'}/></Link></li>
-              <li><Link to = {'#'}><AiOutlineEdit color='green' size={'20px'}/></Link></li>
-              <li><Link to = {'#'}><AiOutlineDelete color='red' size={'20px'}/></Link></li>
+              <li><Link to={`/dashboard/user/${record.id}`}><TbListDetails color='blue' size={'20px'}/></Link></li>
+              <li><Link to={`/dashboard/user/update/${record.id}`}><AiOutlineEdit color='green' size={'20px'}/></Link></li>
+              <li><AiOutlineDelete color='red' onClick={()=>Delete(record)} size={'20px'}/></li>
             </ul>
           </div>
         )
@@ -73,6 +56,72 @@ const columns = [
 
    
   ];
+
+}
+
+//     {
+//       title: 'First Name',
+//       dataIndex: 'firstName',
+//       sorter: (a, b) => a.firstName.localeCompare(b.firstName),
+//       sortDirections: ['descend', 'ascend'],
+//       responsive: ["sm", "xs"]
+//     },
+//     {
+//       title: 'Last Name',
+//       dataIndex: 'lastName',
+//       sorter: (a, b) => a.lastName.localeCompare(b.lastName),
+//       sortDirections: ['descend', 'ascend'],
+//       responsive: ["sm", "xs"]
+//     },
+//     {
+//       title: 'Username',
+//       dataIndex: 'email',
+//       sorter: (a, b) => a.email.localeCompare(b.email),
+//       sortDirections: ['descend', 'ascend'],
+//       responsive: ["sm", "xs"]
+//     },
+//     {
+//       title: 'State',
+//       dataIndex: 'status',
+//       render:(status)=>`${status ? 'active' : 'inactive'}`,
+//       responsive: ["sm", "xs"]
+//     },
+//     {
+//       title: 'Verified',
+//       dataIndex: 'verified',
+//       render:(verified)=>`${verified ? 'yes' : 'no'}`,
+//       responsive: ["sm", "xs"]
+//     },
+//     {
+//       title: 'Role',
+//       dataIndex: 'roleId',
+//       render:(roleId)=>`${roleMapper(roleId)}`,
+//       responsive: ["sm", "xs"]
+//     },
+//     {
+//       title: 'Type',
+//       dataIndex: 'type',
+//       responsive: ["sm", "xs"]
+//     },
+//     {
+//       title: 'Actions',
+//       //dataIndex: 'type',
+//       render:(record)=>{
+//         return(
+//           <div>
+//             <ul style={{listStyleType: 'none', display:'flex', justifyContent:'space-between', padding:0, margin:0}}>
+//               <li><TbListDetails onClick={()=>Edit(record)} size={'20px'}/></li>
+//               <li><Link to = {'#'}><AiOutlineEdit color='green' size={'20px'}/></Link></li>
+//               <li><Link to = {'#'}><AiOutlineDelete color='red' size={'20px'}/></Link></li>
+//             </ul>
+//           </div>
+//         )
+//       },
+//       responsive: ["sm", "xs"]
+//     },
+
+   
+//   ];
   const getRandomuserParams = (page, params=false) =>{ 
     const queryParams = new URLSearchParams();
     queryParams.append('page', page)
@@ -81,7 +130,8 @@ const columns = [
 
 
 const Users = () => {
-    const [data, setData] = useState();
+    const [data, setData] = useState(null);
+    const [user, setUser] = useState(null)
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [tableParams, setTableParams] = useState({
@@ -131,10 +181,6 @@ const Users = () => {
     //search
     const onSearch = (value) => console.log(value);
 
-    //Modal for User Details
-    const showModal = () => {
-      setOpen(true);
-    };
     const handleOk = () => {
       setLoading(true);
       setTimeout(() => {
@@ -142,24 +188,28 @@ const Users = () => {
         setOpen(false);
       }, 3000);
     };
+
     const handleCancel = () => {
       setOpen(false);
     };
+    const Edit = (r)=>{
+ 
+      console.log({r});
+    }
+    const Details = (userData)=>{
+      setUser(userData)
+      setOpen(true)
+    }
     return (
         <>
           <Row>
-            <Modal
+            <CustomModal
               open={open}
+              user={user}
               title="Title"
-              onOk={handleOk}
-              onCancel={handleCancel}
-            >
-              <p>Some contents...</p>
-              <p>Some contents...</p>
-              <p>Some contents...</p>
-              <p>Some contents...</p>
-              <p>Some contents...</p>
-            </Modal>
+              handleOk={handleOk}
+              handleCancel={handleCancel}
+            />
           </Row>
 
           <Row style={{display:'flex', justifyContent:'end', marginBottom:'20px'}}>
@@ -170,14 +220,13 @@ const Users = () => {
           
           <Row>
             <Table
-                  columns={columns}
+                  columns={tableColumns(Details,Edit)}
                   rowKey={(record)=>record.id}
                   dataSource={data}
                   pagination={tableParams.pagination}
                   loading={loading}
                   onChange={handleTableChange}
                   scroll={{
-                      x:'100vw',
                       y:'55vh'
                   }}
       

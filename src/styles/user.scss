@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@700&display=swap');
+.user-form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-y: scroll;
+    height: 70vh;
+
+
+    .user-form-col{
+        background: #FFFFFF;
+        border: 1px solid #DFE0EB;
+        border-radius: 8px;
+        padding: 20px;
+    }
+
+    .user-form-title{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: #A4A6B3;
+        font-size: 19px;
+        opacity: 0.77;
+        letter-spacing: 0.4px;
+        font-weight: 700;
+        font-family: Mulish;
+        h2{
+            font-family: 'Mulish';
+            font-style: normal;
+            font-weight: 700;
+            font-size: 24px;
+            line-height: 30px;
+            text-align: center;
+            letter-spacing: 0.3px;
+            color: #252733;
+        }
+    }
+
+    .user-form-input-label{
+        font-family: 'Mulish';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 30px;
+        letter-spacing: 0.3px;
+        color: #9FA2B4 !important;
+    }
+
+    
+
+}
